@@ -1,0 +1,385 @@
+# Default values for librechat.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: {{ requiredEnv "CI_REGISTRY_IMAGE" }}/libre-chat
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "{{ requiredEnv "TAG" }}"
+
+imagePullSecrets:
+  - name: registry-gitlab
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 3080
+
+ingress:
+  enabled: true
+  className: "{{ requiredEnv "INGRESS_CLASS" }}"
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: "{{ requiredEnv "URL" }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+config: |-
+  ALLOW_EMAIL_LOGIN: "false"
+  ALLOW_REGISTRATION: "false"
+  ALLOW_SOCIAL_LOGIN: "true"
+  ALLOW_SOCIAL_REGISTRATION: "true"
+  ANTHROPIC_API_KEY: user_provided
+  ANTHROPIC_MODELS: claude-1,claude-instant-1,claude-2
+  APP_TITLE: "Librechat"
+  AZURE_OPENAI_MODELS: gpt-3.5-turbo,gpt-4
+  AZURE_USE_MODEL_AS_DEPLOYMENT_NAME: "true"
+  BAN_DURATION: 1000 * 60 * 60 * 2
+  BAN_INTERVAL: "20"
+  BAN_VIOLATIONS: "true"
+  BINGAI_TOKEN: user_provided
+  CHATGPT_MODELS: text-davinci-002-render-sha
+  CHECK_BALANCE: "false"
+  CONCURRENT_MESSAGE_MAX: "2"
+  CONCURRENT_VIOLATION_SCORE: "1"
+  CREDS_IV: e2341419ec3dd3d19b13a1a87fafcbfb
+  CREDS_KEY: f34be427ebb29de8d88c107a71546019685ed8b241d8f2ed00c3df97ad2566f0
+  DEBUG_CONSOLE: "false"
+  DEBUG_LOGGING: "false"
+  DEBUG_OPENAI: "false"
+  DEBUG_PLUGINS: "false"
+  DOMAIN_CLIENT: https://{{ requiredEnv "URL" }}
+  DOMAIN_SERVER: https://{{ requiredEnv "URL" }}
+  GID: "1000"
+  GOOGLE_KEY: user_provided
+  HOST: 0.0.0.0
+  JWT_REFRESH_SECRET: eaa5191f2914e30b9387fd84e254e4ba6fc51b4654968a9b0803b456a54b13234
+  JWT_SECRET: 16f8c0ef4a5d391b26034086c628469d3f9f497f08163ab9b40137092f2909th
+  LIMIT_CONCURRENT_MESSAGES: "true"
+  LIMIT_MESSAGE_IP: "true"
+  LIMIT_MESSAGE_USER: "false"
+  LOGIN_MAX: "7"
+  LOGIN_VIOLATION_SCORE: "1"
+  LOGIN_WINDOW: "5"
+  MEILI_HOST: http://librechat-meilisearch:7700
+  MEILI_HTTP_ADDR: 0.0.0.0:7700
+  MEILI_NO_ANALYTICS: "true"
+  MESSAGE_IP_MAX: "40"
+  MESSAGE_IP_WINDOW: "1"
+  MESSAGE_USER_MAX: "40"
+  MESSAGE_USER_WINDOW: "1"
+  MESSAGE_VIOLATION_SCORE: "1"
+  MONGO_URI: mongodb://librechat:{{ requiredEnv "MONGODB_PASSWORD" }}@librechat-mongodb-headless/librechat
+  NON_BROWSER_VIOLATION_SCORE: "20"
+  OPENAI_API_KEY: user_provided
+  PORT: "3080"
+  REFRESH_TOKEN_EXPIRY: (1000 * 60 * 60 * 24) * 7
+  REGISTER_MAX: "5"
+  REGISTER_WINDOW: "60"
+  REGISTRATION_VIOLATION_SCORE: "1"
+  SEARCH: "true"
+  SESSION_EXPIRY: 1000 * 60 * 15
+  UID: "1000"
+  OPENID_CLIENT_ID: "{{ requiredEnv "CLIENT_ID" }}"
+  OPENID_CLIENT_SECRET: "{{ requiredEnv "CLIENT_SECRET" }}"
+  OPENID_ISSUER: "{{ requiredEnv "OPENID_ISSUER" }}"
+  OPENID_SESSION_SECRET: "{{ requiredEnv "OPENID_SESSION_SECRET" }}"
+  OPENID_SCOPE: openid profile email
+  OPENID_CALLBACK_URL: /oauth/openid/callback
+  OPENID_BUTTON_LABEL: Connect
+  USE_REDIS: "true"
+  REDIS_URI: "redis://librechat-redis-master"
+
+configEndpoint:
+  name: "Custom Endpoint"
+  baseurl: "https://llm-proxy.example.com/v1"
+  models:
+    - Mixtral-8x7b
+    - Llama2-70B
+  titleModel: "Mixtral-8x7b"
+  summaryModel: "Mixtral-8x7b"
+  modelDisplayLabel: "PasteurAI"
+
+meilisearch:
+  enabled: true
+  image:
+    # -- Meilisearch image name
+    repository: getmeili/meilisearch
+    # -- Meilisearch image tag
+    tag: v1.5.0
+    # -- Meilisearch image pull policy
+    pullPolicy: IfNotPresent
+    # -- Secret to authenticate against the docker registry
+    pullSecret:
+
+  # Environment loaded into the configMap
+  environment:
+    # -- Deactivates analytics
+    MEILI_NO_ANALYTICS: true
+    MEILI_ENV: production
+    #MEILI_MASTER_KEY: "{{ requiredEnv "MEILI_MASTER_KEY" }}"
+
+  serviceAccount:
+    # You can use a specific pre-created service account instead of
+    # the one created by this chart.
+    # Set create to false to prevent creating a service account and use your own.
+    # -- Should this chart create a service account
+    create: true
+    # -- Custom service account name, if not created by this chart
+    name: ''
+    # -- Additional annotations for created service account
+    annotations: {}
+
+  podAnnotations: {}
+
+  # -- Additional labels to add to the pod(s) only
+  podLabels: {}
+
+  # -- Additional labels to add to all resources
+  customLabels: {}
+
+  # -- Service HTTP port
+  service:
+    # -- Kubernetes Service type
+    type: ClusterIP
+    port: 7700
+    # -- Additional annotations for service
+    annotations: {}
+
+  container:
+    containerPort: 7700
+
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+
+  ingress:
+    # -- Enable ingress controller resource
+    enabled: false
+    # -- Ingress ingressClassName
+    className: nginx
+    # -- Ingress annotations
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+    # -- Path within the host
+    path: /
+    # -- List of hostnames
+    hosts:
+      - meilisearch-example.local
+    # -- TLS specification
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  persistence:
+    # -- Enable persistence using PVC
+    enabled: true
+    # -- PVC Access Mode
+    accessMode: ReadWriteOnce
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # -- PVC Storage Class
+    storageClass: "-"
+
+    ## Data Persistent Volume existing claim name
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    # -- Existing PVC
+    existingClaim: ""
+    # -- PVC Storage Request
+    size: 10Gi
+    # -- Additional annotations for PVC
+    annotations: {}
+    volume:
+      name: data
+      mountPath: /meili_data
+
+  # -- Resources allocation (Requests and Limits)
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  # -- Additional volumes for pod
+  volumes: []
+
+  # -- Additional volumes to mount on pod
+  volumeMounts: []
+
+  # -- Additional containers for pod
+  containers: []
+
+  # -- Node labels for pod assignment
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment
+  tolerations: []
+
+  # -- Affinity for pod assignment
+  affinity: {}
+
+  # -- Pod command
+  command: []
+
+  # -- Monitoring with Prometheus Operator
+  serviceMonitor:
+    # -- Enable ServiceMonitor to configure scraping
+    enabled: false
+    # -- Set of labels to transfer from the Kubernetes Service onto the target
+    additionalLabels: {}
+    # -- Set scraping frequency
+    interval: 1m
+    # -- Set scraping timeout
+    scrapeTimeout: 10s
+    # -- Set path to metrics
+    telemetryPath: /metrics
+    # -- Set of labels to transfer from the Kubernetes Service onto the target
+    targetLabels: []
+    # -- MetricRelabelConfigs to apply to samples before ingestion
+    metricRelabelings: []
+    # -- Set relabel_configs as per https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    relabelings: []
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+    password: 'changeme'
+    # name of an existing secret with Redis® credentials (instead of auth.password), must be created ahead of time
+    existingSecret: ""
+    # Password key to be retrieved from existing secret
+    existingSecretPasswordKey: ""
+
+### ref https://github.com/helm/charts/tree/master/stable/mongodb#configuration
+##
+mongodb:
+  ## Enable or disable MongoDB dependency completely.
+  enabled: true
+  auth:
+    rootPassword: {{ requiredEnv "MONGODB_ROOT_PASSWORD" }}
+    usernames:
+      - librechat
+    passwords: 
+      - {{ requiredEnv "MONGODB_PASSWORD" }}
+    databases:
+      - librechat
+    replicaSetKey: {{ requiredEnv "MONGODB_REPLICASET_KEY" }}
+
+  architecture: replicaset
+  replicaCount: 3
+  arbiter:
+    enabled: false
+    pdb:
+      minAvailable: 0
+  pdb:
+    minAvailable: 0
+
+    # key:
+
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  persistence:
+    enabled: true
+    ## mongodb data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+  volumePermissions: { enabled: true }

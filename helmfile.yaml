@@ -1,0 +1,14 @@
+repositories:
+  - name: meilisearch
+    url: https://meilisearch.github.io/meilisearch-kubernetes
+
+helmDefaults:
+  createNamespace: false
+
+releases:
+  - name: librechat
+    chart: ./librechat
+    namespace: {{ requiredEnv "KUBE_NAMESPACE" }}
+    installed: true
+    values:
+    - ./values-librechat-yaml.gotmpl
