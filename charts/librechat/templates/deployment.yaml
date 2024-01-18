@@ -64,9 +64,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+          {{- if .Values.config.file.enabled }}
           - mountPath: /app/librechat.yaml
             name: librechat-config
             subPath: {{ .Values.config.file.configMapKeyRef.key }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
