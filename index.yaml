@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  librechat:
+  - apiVersion: v2
+    created: "2024-01-18T13:23:28.0838978+01:00"
+    description: Frontend for AI endpoints
+    digest: 95dd52855290839ffb7b2f72e66c75969b7e9c90236900cc5abbd5aad50d6de0
+    name: librechat
+    type: application
+    urls:
+    - schluggi.github.io/LibreChat-Helm/librechat-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-01-18T13:23:28.0829528+01:00"
