@@ -19,6 +19,7 @@ spec:
       {{- end }}
       labels:
         {{- include "librechat.selectorLabels" . | nindent 8 }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -34,23 +35,29 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-          - configMapRef:
-              name: {{ include "librechat.fullname" . }}
+            - secretRef:
+                name: {{ .Values.config.envSecrets.secretRef }}
+            - configMapRef:
+                name: {{ include "librechat.fullname" . }}-env
           env:
-          - name: MONGO_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "librechat.fullname" . }}-mongodb
-                key: mongodb-passwords
+            {{- range $secretKeyRef := .Values.config.envSecrets.secretKeyRef }}
+            - name: {{ $secretKeyRef.name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretKeyRef.secretName }}
+                  key: {{ $secretKeyRef.secretKey }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 3080
               protocol: TCP
           livenessProbe:
+            initialDelaySeconds: 5
             httpGet:
               path: /
               port: http
           readinessProbe:
+            initialDelaySeconds: 5
             httpGet:
               path: /
               port: http
@@ -58,8 +65,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
           - mountPath: /app/librechat.yaml
-            name: endpoint-config
-            subPath: librechat.yaml
+            name: librechat-config
+            subPath: {{ .Values.config.file.configMapKeyRef.key }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -72,7 +79,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.config.file.enabled }}
       volumes:
-      - configMap:
-          name: {{ include "librechat.fullname" . }}-endpoint
-        name: endpoint-config
+        - configMap:
+            name: {{ .Values.config.file.configMapKeyRef.name }}
+          name: librechat-config
+      {{- end }}
