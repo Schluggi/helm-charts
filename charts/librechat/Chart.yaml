@@ -1,6 +1,6 @@
 apiVersion: v2
 name: librechat
-description: A Helm chart used to deploy the service librechat owned by dope.
+description: Frontend for AI endpoints
 type: application
 version: 0.1.0
 dependencies:
