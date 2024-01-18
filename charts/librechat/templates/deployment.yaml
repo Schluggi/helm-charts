@@ -19,7 +19,9 @@ spec:
       {{- end }}
       labels:
         {{- include "librechat.selectorLabels" . | nindent 8 }}
-        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
