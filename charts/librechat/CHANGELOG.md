@@ -1,3 +1,6 @@
+# 1.0.2
+- bump dependencies
+
 # 1.0.1
 - fix deployment.yaml
 - fix pvc.yaml
