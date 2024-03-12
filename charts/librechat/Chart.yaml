@@ -9,7 +9,7 @@ dependencies:
     version: 0.5.0
     condition: meilisearch.enabled
   - name: redis
-    version: 18.13.0
+    version: 18.19.2
     repository: oci://registry-1.docker.io/bitnamicharts
     condition: redis.enabled
   - name: mongodb
