@@ -6,7 +6,7 @@ version: 1.0.4
 dependencies:
   - name: meilisearch
     repository: https://meilisearch.github.io/meilisearch-kubernetes
-    version: 0.5.0
+    version: 0.6.1
     condition: meilisearch.enabled
   - name: redis
     version: 18.19.2
