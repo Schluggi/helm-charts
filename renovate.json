@@ -9,7 +9,8 @@
     {
       "matchUpdateTypes": [
         "minor",
-        "patch"
+        "patch",
+        "major"
       ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
