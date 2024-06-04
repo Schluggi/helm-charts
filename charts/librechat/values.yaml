@@ -7,8 +7,9 @@ replicaCount: 1
 image:
   repository: ghcr.io/danny-avila/librechat
   pullPolicy: IfNotPresent
+
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  # tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -323,6 +324,43 @@ meilisearch:
     metricRelabelings: []
     # -- Set relabel_configs as per https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     relabelings: []
+
+rag:
+  enabled: false
+  image:
+    repository: ghcr.io/danny-avila/librechat-rag-api-dev
+    pullPolicy: IfNotPresent
+    tag: 12427916d74d61ca02751c6358fbd21014a5757f
+  
+  service:
+    type: ClusterIP
+    port: 8000
+
+  volumes:
+    uploads:
+      size: 500Mi
+
+  config:
+    env:
+      # https://github.com/danny-avila/rag_api?tab=readme-ov-file#environment-variables
+      EMBEDDINGS_MODEL: text-embedding-3-small
+      EMBEDDINGS_PROVIDER: openai
+      RAG_AZURE_OPENAI_API_VERSION: 2023-05-15
+      RAG_AZURE_OPENAI_ENDPOINT: 
+      POSTGRES_USER: librechat-rag-db-user
+      POSTGRES_DB: librechat-rag
+      DB_PORT: 5432
+      DB_HOST: my-extern-pgvector-instance.fqdn.invalid
+
+    envSecrets:
+      secretKeyRef:
+        - name: POSTGRES_PASSWORD
+          secretName: librechat
+          secretKey: rag
+      secretKeyRef:
+        - name: RAG_AZURE_OPENAI_API_KEY
+          secretName: librechat
+          secretKey: rag
 
 redis:
   enabled: false
