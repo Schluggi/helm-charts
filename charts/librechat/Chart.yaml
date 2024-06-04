@@ -2,7 +2,7 @@ apiVersion: v2
 name: librechat
 description: Frontend for AI endpoints
 type: application
-version: 1.0.4
+version: 1.1.0
 appVersion: v0.7.2
 dependencies:
   - name: meilisearch

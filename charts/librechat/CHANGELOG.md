@@ -1,3 +1,7 @@
+# 1.1.0
+- bump dependencies
+- add basic rag support
+
 # 1.0.4
 - bump dependencies
 
