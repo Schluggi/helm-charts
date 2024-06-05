@@ -31,7 +31,6 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        
         {{- if .Values.rag.enabled }}
         - name: {{ .Chart.Name }}-rag
           image: "{{ .Values.rag.image.repository }}:{{ .Values.rag.image.tag }}"
@@ -50,23 +49,12 @@ spec:
             - name: http-rag
               containerPort: 8000
               protocol: TCP
-          # livenessProbe:
-          #   initialDelaySeconds: 5
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   initialDelaySeconds: 5
-          #   httpGet:
-          #     path: /
-          #     port: http
           resources:
             {{- toYaml .Values.rag.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /app/uploads
               name: librechat-rag-uploads
         {{- end }}
-
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -102,11 +90,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-          {{- if .Values.config.file.enabled }}
-          - mountPath: /app/librechat.yaml
-            name: librechat-config
-            subPath: {{ .Values.config.file.configMapKeyRef.key }}
-          {{- end }}
+            {{- if .Values.config.file.enabled }}
+            - mountPath: /app/librechat.yaml
+              name: librechat-config
+              subPath: {{ .Values.config.file.configMapKeyRef.key }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -126,7 +114,7 @@ spec:
             name: {{ .Values.config.file.configMapKeyRef.name }}
         {{- if .Values.rag.enabled }}
         - name: librechat-rag-uploads
-        emptyDir:
-          sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
+          emptyDir:
+            sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
         {{- end }}
       {{- end }}
