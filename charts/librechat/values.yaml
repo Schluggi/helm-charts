@@ -357,7 +357,6 @@ rag:
         - name: POSTGRES_PASSWORD
           secretName: librechat
           secretKey: rag
-      secretKeyRef:
         - name: RAG_AZURE_OPENAI_API_KEY
           secretName: librechat
           secretKey: rag
