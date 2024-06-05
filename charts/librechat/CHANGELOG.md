@@ -1,3 +1,6 @@
+# 1.1.3
+- fix template issues
+
 # 1.1.2
 - fix template issues
 

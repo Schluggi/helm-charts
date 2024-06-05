@@ -35,9 +35,10 @@ spec:
         - name: {{ .Chart.Name }}-rag
           image: "{{ .Values.rag.image.repository }}:{{ .Values.rag.image.tag }}"
           imagePullPolicy: {{ .Values.rag.image.pullPolicy }}
-          env:
+          envFrom:
             - configMapRef:
                 name: {{ include "librechat.fullname" . }}-rag-env
+          env:
             {{- range $secretKeyRef := .Values.rag.config.envSecrets.secretKeyRef }}
             - name: {{ $secretKeyRef.name }}
               valueFrom:
