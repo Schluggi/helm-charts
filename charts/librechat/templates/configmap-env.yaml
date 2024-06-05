@@ -16,6 +16,6 @@ metadata:
   labels:
     {{- include "librechat.labels" . | nindent 4 }}
 data:
-{{- range $key, $val := .rag.config.env }}
+{{- range $key, $val := .Values.rag.config.env }}
   {{ $key }}: {{ $val | quote }}
 {{- end }}

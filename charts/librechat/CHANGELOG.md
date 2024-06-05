@@ -1,3 +1,7 @@
+# 1.1.1
+- fix template issues
+- bump dependencies
+
 # 1.1.0
 - bump dependencies
 - add basic rag support
