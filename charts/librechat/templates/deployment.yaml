@@ -31,41 +31,6 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        {{- if .Values.rag.enabled }}
-        - name: {{ .Chart.Name }}-rag
-          image: "{{ .Values.rag.image.repository }}:{{ .Values.rag.image.tag }}"
-          imagePullPolicy: {{ .Values.rag.image.pullPolicy }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "librechat.fullname" . }}-rag-env
-          env:
-            {{- range $secretKeyRef := .Values.rag.config.envSecrets.secretKeyRef }}
-            - name: {{ $secretKeyRef.name }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $secretKeyRef.secretName }}
-                  key: {{ $secretKeyRef.secretKey }}
-            {{- end }}
-          ports:
-            - name: http-rag
-              containerPort: 8000
-              protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health
-              port: http-rag
-          readinessProbe:
-            initialDelaySeconds: 2
-            httpGet:
-              path: /health
-              port: http-rag
-          resources:
-            {{- toYaml .Values.rag.resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /app/uploads
-              name: librechat-rag-uploads
-        {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -123,11 +88,6 @@ spec:
         - name: librechat-config
           configMap:
             name: {{ .Values.config.file.configMapKeyRef.name }}
-        {{- if .Values.rag.enabled }}
-        - name: librechat-rag-uploads
-          emptyDir:
-            sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
-        {{- end }}
       {{- end }}
 ---
 {{- if .Values.rag.enabled }}
