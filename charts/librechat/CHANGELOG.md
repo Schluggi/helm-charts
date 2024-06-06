@@ -1,3 +1,6 @@
+# 1.2.1
+- fix network policy
+
 # 1.2.0
 - remove sidecar
 
