@@ -1,4 +1,23 @@
 {{- if .Values.networkPolicies.enabled }}
+{{- if .Values.rag.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "librechat.fullname" . }}-rag
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "librechat.fullname" . }}-rag
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ include "librechat.fullname" . }}
+      ports:
+        - port: {{ .Values.rag.service.port }}
+          protocol: TCP
+{{- end }}
+---
 {{- if .Values.meilisearch.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

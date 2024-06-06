@@ -1,3 +1,8 @@
+# 1.2.0
+- add network policy for rag
+- add healthcheck for rag
+- add missing JWT_SECRET to default values
+
 # 1.1.3
 - fix template issues
 

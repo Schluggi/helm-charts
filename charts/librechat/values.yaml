@@ -327,11 +327,40 @@ meilisearch:
 
 rag:
   enabled: false
+
+  autoscaling:
+    enabled: false
+  
+  replicaCount: 1
+
+  podAnnotations: {}
+  podLabels: {}
+  
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+  labels: {}
+
+  imagePullSecrets: []
+
   image:
     repository: ghcr.io/danny-avila/librechat-rag-api-dev
     pullPolicy: IfNotPresent
     tag: 12427916d74d61ca02751c6358fbd21014a5757f
-  
+
+  podSecurityContext: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
   service:
     type: ClusterIP
     port: 8000
@@ -356,10 +385,13 @@ rag:
       secretKeyRef:
         - name: POSTGRES_PASSWORD
           secretName: librechat
-          secretKey: rag
+          secretKey: postgres_pw
         - name: RAG_AZURE_OPENAI_API_KEY
           secretName: librechat
-          secretKey: rag
+          secretKey: azure_openai_key
+        - name: JWT_SECRET
+          secretName: librechat
+          secretKey: jwt_secret
 
 redis:
   enabled: false
