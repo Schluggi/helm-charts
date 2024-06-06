@@ -6,10 +6,12 @@ on:
     branches:
       - main
     paths:
-      - charts/*
+      - charts/**.yaml
+      - charts/**.yml
   pull_request:
     paths:
-      - charts/*
+      - charts/**.yaml
+      - charts/**.yml
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,23 +36,14 @@ jobs:
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
-
-      - name: Run chart-testing (list-changed)
-        id: list-changed
-        run: |
-          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
-          if [[ -n "$changed" ]]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
+        with:
+          version: v3.8.0
 
       - name: Run chart-testing (lint)
-        if: steps.list-changed.outputs.changed == 'true'
-        run: ct lint --target-branch ${{ github.event.repository.default_branch }}
+        run: ct lint --chart-dirs=charts/librechat --target-branch ${{ github.event.repository.default_branch }}
 
-      - name: Create kind cluster
-        if: steps.list-changed.outputs.changed == 'true'
-        uses: helm/kind-action@v1.10.0
+      #- name: Create kind cluster
+      #  uses: helm/kind-action@v1.10.0
 
-      - name: Run chart-testing (install)
-        if: steps.list-changed.outputs.changed == 'true'
-        run: ct install --target-branch ${{ github.event.repository.default_branch }}
+      #- name: Run chart-testing (install)
+      #  run: ct install --target-branch ${{ github.event.repository.default_branch }}

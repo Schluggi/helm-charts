@@ -1,7 +1,11 @@
 # 1.2.0
+- remove sidecar
+
+# 1.1.4
 - add network policy for rag
 - add healthcheck for rag
 - add missing JWT_SECRET to default values
+- move rag from sidecar to deployment
 
 # 1.1.3
 - fix template issues
