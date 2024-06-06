@@ -1,4 +1,4 @@
-# 1.2.0
+# 1.1.4
 - add network policy for rag
 - add healthcheck for rag
 - add missing JWT_SECRET to default values
