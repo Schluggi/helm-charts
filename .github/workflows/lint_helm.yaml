@@ -40,7 +40,7 @@ jobs:
           version: v3.8.0
 
       - name: Run chart-testing (lint)
-        run: ct lint --chart-dirs=charts --target-branch ${{ github.event.repository.default_branch }}
+        run: ct lint --chart-dirs=charts/librechat --target-branch ${{ github.event.repository.default_branch }}
 
       #- name: Create kind cluster
       #  uses: helm/kind-action@v1.10.0
