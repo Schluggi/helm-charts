@@ -1,5 +1,4 @@
 # 1.2.0
-- remove initialDelaySeconds for rag
 - remove sidecar
 
 # 1.1.4
