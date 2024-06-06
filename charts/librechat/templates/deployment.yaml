@@ -214,4 +214,3 @@ spec:
           emptyDir:
             sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
 {{- end }}
-
