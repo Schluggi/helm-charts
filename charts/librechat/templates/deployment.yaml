@@ -183,12 +183,10 @@ spec:
               containerPort: 8000
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 2
             httpGet:
               path: /health
               port: http-rag
           readinessProbe:
-            initialDelaySeconds: 2
             httpGet:
               path: /health
               port: http-rag

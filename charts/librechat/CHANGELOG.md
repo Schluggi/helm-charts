@@ -1,5 +1,5 @@
 # 1.2.0
-(tbc)
+- remove initialDelaySeconds for rag
 
 # 1.1.4
 - add network policy for rag
