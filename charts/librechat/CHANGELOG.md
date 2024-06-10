@@ -1,3 +1,7 @@
+# 1.2.2
+- remove unused persistence feature ([#33](https://github.com/Schluggi/helm-charts/issues/33))
+- bump dependencies
+
 # 1.2.1
 - fix network policy
 
