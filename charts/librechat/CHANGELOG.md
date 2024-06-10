@@ -1,5 +1,6 @@
-# 1.2.2
+# 1.3.0
 - remove unused persistence feature ([#33](https://github.com/Schluggi/helm-charts/issues/33))
+- reload when cm changes ([#32](https://github.com/Schluggi/helm-charts/issues/32))
 - bump dependencies
 
 # 1.2.1
