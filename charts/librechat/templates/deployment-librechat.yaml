@@ -69,7 +69,7 @@ spec:
           volumeMounts:
             {{- if .Values.config.file.enabled }}
             - mountPath: /app/librechat.yaml
-              name: librechat-config
+              name: config
               subPath: {{ .Values.config.file.configMapKeyRef.key }}
             {{- end }}
             - name: storage

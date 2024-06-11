@@ -1,3 +1,6 @@
+# 1.4.1
+- fixing config problem
+
 # 1.4.0
 - add persistence back in ([#33](https://github.com/Schluggi/helm-charts/issues/33))
 - bump dependencies
