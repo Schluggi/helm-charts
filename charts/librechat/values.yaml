@@ -77,6 +77,16 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+persistence:
+  enabled: false
+  existingClaim: ""
+  accessMode: ReadWriteOnce
+  size: "50Gi"
+  storageClass: "-"
+  subPath:
+    images: "" 
+    logs: ""
+
 nodeSelector: {}
 
 tolerations: []

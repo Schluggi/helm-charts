@@ -1,3 +1,8 @@
+# 1.4.0
+- add persistence back in ([#33](https://github.com/Schluggi/helm-charts/issues/33))
+- bump dependencies
+- deployment cleanup
+
 # 1.3.0
 - remove unused persistence feature ([#33](https://github.com/Schluggi/helm-charts/issues/33))
 - reload when cm changes ([#32](https://github.com/Schluggi/helm-charts/issues/32))

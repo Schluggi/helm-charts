@@ -72,6 +72,12 @@ spec:
               name: librechat-config
               subPath: {{ .Values.config.file.configMapKeyRef.key }}
             {{- end }}
+            - name: storage
+              mountPath: /app/client/public/images
+              subPath: {{ .Values.persistence.subPath.images | default "images" | quote }}
+            - name: storage
+              mountPath: /app/api/logs
+              subPath: {{ .Values.persistence.subPath.images | default "logs" | quote }}
       nodeSelector:
         {{- with .Values.nodeSelector }}
         {{- toYaml . | nindent 8 }}
@@ -85,93 +91,15 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       volumes:
-        - name: librechat-config
+        {{- if .Values.config.file.enabled }}
+        - name: config
           configMap:
             name: {{ .Values.config.file.configMapKeyRef.name }}
-      {{- end }}
----
-{{- if .Values.rag.enabled }}
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "librechat.fullname" . }}-rag
-  labels:
-    {{- include "librechat.labels" . | nindent 4 }}
-spec:
-  {{- if not .Values.rag.autoscaling.enabled }}
-  replicas: {{ .Values.rag.replicaCount }}
-  {{- end }}
-  selector:
-    matchLabels:
-      {{- include "librechat.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
-        {{- with .Values.rag.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
         {{- end }}
-      labels:
-        {{- include "librechat.selectorLabels" . | nindent 8 }}
-        {{- with .Values.rag.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-    spec:
-      imagePullSecrets:
-        {{- with .Values.rag.imagePullSecrets }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-      serviceAccountName: {{ include "librechat.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.rag.podSecurityContext | nindent 8 }}
-      containers:
-        - name: {{ .Chart.Name }}-rag
-          image: "{{ .Values.rag.image.repository }}:{{ .Values.rag.image.tag }}"
-          imagePullPolicy: {{ .Values.rag.image.pullPolicy }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "librechat.fullname" . }}-rag-env
-          env:
-            {{- range $secretKeyRef := .Values.rag.config.envSecrets.secretKeyRef }}
-            - name: {{ $secretKeyRef.name }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $secretKeyRef.secretName }}
-                  key: {{ $secretKeyRef.secretKey }}
-            {{- end }}
-          ports:
-            - name: http-rag
-              containerPort: 8000
-              protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: 5
-            httpGet:
-              path: /health
-              port: http-rag
-          readinessProbe:
-            initialDelaySeconds: 5
-            httpGet:
-              path: /health
-              port: http-rag
-          resources:
-            {{- toYaml .Values.rag.resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /app/uploads
-              name: librechat-rag-uploads
-      nodeSelector:
-        {{- with .Values.rag.nodeSelector }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}    
-      affinity:
-        {{- with .Values.rag.affinity }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-      tolerations:
-        {{- with .Values.rag.tolerations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-      volumes:
-        - name: librechat-rag-uploads
-          emptyDir:
-            sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
-{{- end }}
+        - name: storage
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-storage" (include "librechat.fullname" .)) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
