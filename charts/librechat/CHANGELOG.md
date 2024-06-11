@@ -1,3 +1,6 @@
+# 1.4.2
+- fix pvc permissions
+
 # 1.4.1
 - fixing config problem
 
