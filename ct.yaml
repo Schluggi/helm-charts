@@ -1,0 +1,11 @@
+# See https://github.com/helm/chart-testing#configuration
+owner: schluggi
+repo: helm-charts
+remote: origin
+target-branch: main
+chart-dirs:
+  - charts
+chart-repos:
+  - schluggi=https://raw.githubusercontent.com/Schluggi/helm-charts/gh-pages/
+helm-extra-args: --timeout 10m
+generate-release-notes: true
