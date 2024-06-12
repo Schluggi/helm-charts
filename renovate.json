@@ -25,5 +25,19 @@
         "patch"
       ]
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)Chart.yaml$"],
+      "matchStrings": [
+        "\\nname: (?<depName>.*?)\\n",
+        "\\nappVersion: \"(?<currentValue>.*?)\"\\n"
+      ],
+      "matchStringsStrategy": "combination",
+      "depNameTemplate": "ghcr.io/danny-avila/{{{depName}}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver-coerced"
+    }
   ]
 }
