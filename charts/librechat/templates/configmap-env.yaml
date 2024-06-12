@@ -19,3 +19,4 @@ data:
 {{- range $key, $val := .Values.rag.config.env }}
   {{ $key }}: {{ $val | quote }}
 {{- end }}
+somebug: Yes
