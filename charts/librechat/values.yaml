@@ -393,7 +393,7 @@ mongodb:
   
   service:
     ports:
-      mongodb: 6379
+      mongodb: 27017
   
   auth:
     # rootPassword:
