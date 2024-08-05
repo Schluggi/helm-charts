@@ -374,8 +374,9 @@ rag:
 
 redis:
   enabled: false
-  service:
-    port: 6379
+  masterService:
+    ports:
+      redis: 6379
   auth:
     enabled: true
     password: 'changeme'
@@ -391,7 +392,8 @@ mongodb:
   enabled: false
   
   service:
-    port: 27017
+    ports:
+      mongodb: 6379
   
   auth:
     # rootPassword:
