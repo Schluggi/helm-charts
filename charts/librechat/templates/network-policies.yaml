@@ -55,7 +55,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: redis
       ports:
-        - port: {{ .Values.redis.service.ports.redis }}
+        - port: {{ .Values.redis.service.port }}
           protocol: TCP
 {{- end }}
 ---
@@ -77,7 +77,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: mongodb
       ports:
-        - port: {{ .Values.redis.service.ports.mongodb }}
+        - port: {{ .Values.redis.service.port }}
           protocol: TCP
 {{- end }}
 {{- end }}
