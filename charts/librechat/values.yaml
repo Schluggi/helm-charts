@@ -374,6 +374,8 @@ rag:
 
 redis:
   enabled: false
+  service:
+    port: 6379
   auth:
     enabled: true
     password: 'changeme'
@@ -387,7 +389,10 @@ redis:
 mongodb:
   ## Enable or disable MongoDB dependency completely.
   enabled: false
-
+  
+  service:
+    port: 27017
+  
   auth:
     # rootPassword:
     usernames:
