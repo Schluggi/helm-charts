@@ -1,3 +1,7 @@
+# 1.4.4
+- bump dependencies
+- bump librechat to v0.7.4
+
 # 1.4.3
 - fix netpol ports for redis & mongodb
 - bump dependencies
