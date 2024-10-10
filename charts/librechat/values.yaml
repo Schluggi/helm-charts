@@ -139,7 +139,7 @@ meilisearch:
     # -- Meilisearch image name
     repository: getmeili/meilisearch
     # -- Meilisearch image tag
-    tag: v1.10.2
+    tag: v1.10.3
     # -- Meilisearch image pull policy
     pullPolicy: IfNotPresent
     # -- Secret to authenticate against the docker registry
