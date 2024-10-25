@@ -1,5 +1,9 @@
 # 1.4.4
 - bump dependencies
+- bump librechat to v1.0.0
+
+# 1.4.4
+- bump dependencies
 - bump librechat to v0.7.4
 
 # 1.4.3
