@@ -78,6 +78,9 @@ spec:
             - name: storage
               mountPath: /app/api/logs
               subPath: {{ .Values.persistence.subPath.images | default "logs" | quote }}
+            {{- if .Values.volumeMounts }}
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+            {{- end }}
       nodeSelector:
         {{- with .Values.nodeSelector }}
         {{- toYaml . | nindent 8 }}
@@ -103,3 +106,6 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.volumes }}
+        {{- toYaml .Values.volumes | nindent 8 }}
+        {{- end }}
