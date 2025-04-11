@@ -32,6 +32,10 @@ spec:
       serviceAccountName: {{ include "librechat.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.rag.podSecurityContext | nindent 8 }}
+      {{- if .Values.rag.initContainers }}
+      initContainers:
+        {{- toYaml .Values.rag.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}-rag
           image: "{{ .Values.rag.image.repository }}:{{ .Values.rag.image.tag }}"
@@ -66,6 +70,9 @@ spec:
           volumeMounts:
             - mountPath: /app/uploads
               name: librechat-rag-uploads
+            {{- if .Values.rag.volumeMounts }}
+            {{- toYaml .Values.rag.volumeMounts | nindent 12 }}
+            {{- end }}
       nodeSelector:
         {{- with .Values.rag.nodeSelector }}
         {{- toYaml . | nindent 8 }}
@@ -81,5 +88,8 @@ spec:
       volumes:
         - name: librechat-rag-uploads
           emptyDir:
-            sizeLimit: {{ .Values.rag.volumes.uploads.size | default "500Mi" }}
+            sizeLimit: {{ .Values.rag.uploads.size | default "500Mi" }}
+        {{- if .Values.rag.volumes }}
+        {{- toYaml .Values.rag.volumes | nindent 8 }}
+        {{- end }}
 {{- end }}

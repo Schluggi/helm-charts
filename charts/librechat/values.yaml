@@ -28,10 +28,11 @@ podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext: 
+podSecurityContext:
   fsGroup: 1000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -49,7 +50,8 @@ service:
 ingress:
   enabled: true
   className: "nginx"
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -62,7 +64,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -85,7 +88,7 @@ persistence:
   storageClass: "-"
   selector: ""
   subPath:
-    images: "" 
+    images: ""
     logs: ""
 
 nodeSelector: {}
@@ -108,9 +111,9 @@ config:
 
     # Use this when using one k8s secret for each env secret
     secretKeyRef: []
-#      - name: CREDS_IV
-#        secretName: librechat
-#        secretKey: CREDS_IV
+    #  - name: CREDS_IV
+    #    secretName: librechat
+    #    secretKey: CREDS_IV
 
   env:
     # Full list of possible values
@@ -167,7 +170,7 @@ meilisearch:
     # -- Should this chart create a service account
     create: true
     # -- Custom service account name, if not created by this chart
-    name: ''
+    name: ""
     # -- Additional annotations for created service account
     annotations: {}
 
@@ -210,7 +213,8 @@ meilisearch:
     # -- Ingress ingressClassName
     className: nginx
     # -- Ingress annotations
-    annotations: {}
+    annotations:
+      {}
       # kubernetes.io/ingress.class: nginx
     # -- Path within the host
     path: /
@@ -252,7 +256,8 @@ meilisearch:
       mountPath: /meili_data
 
   # -- Resources allocation (Requests and Limits)
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -309,12 +314,12 @@ rag:
 
   autoscaling:
     enabled: false
-  
+
   replicaCount: 1
 
   podAnnotations: {}
   podLabels: {}
-  
+
   resources: {}
   # limits:
   #   cpu: 100m
@@ -334,6 +339,15 @@ rag:
 
   podSecurityContext: {}
 
+  # -- Init containers to add to the pod
+  initContainers: []
+  # - name: download-file
+  #   image: curlimages/curl:8.6.0
+  #   command: ['sh', '-c', 'curl -o /downloads/config.json https://example.com/static/config.json']
+  #   volumeMounts:
+  #     - name: librechat-rag-uploads
+  #       mountPath: /downloads
+
   nodeSelector: {}
 
   tolerations: []
@@ -344,9 +358,8 @@ rag:
     type: ClusterIP
     port: 8000
 
-  volumes:
-    uploads:
-      size: 500Mi
+  uploads:
+    size: 500Mi
 
   config:
     env:
@@ -354,7 +367,7 @@ rag:
       EMBEDDINGS_MODEL: text-embedding-3-small
       EMBEDDINGS_PROVIDER: openai
       RAG_AZURE_OPENAI_API_VERSION: 2023-05-15
-      RAG_AZURE_OPENAI_ENDPOINT: 
+      RAG_AZURE_OPENAI_ENDPOINT:
       POSTGRES_USER: librechat-rag-db-user
       POSTGRES_DB: librechat-rag
       DB_PORT: 5432
@@ -372,6 +385,12 @@ rag:
           secretName: librechat
           secretKey: jwt_secret
 
+  # -- Additional volumes for pod
+  volumes: []
+
+  # -- Additional volumes to mount on pod
+  volumeMounts: []
+
 redis:
   enabled: false
   masterService:
@@ -379,7 +398,7 @@ redis:
       redis: 6379
   auth:
     enabled: true
-    password: 'changeme'
+    password: "changeme"
     # name of an existing secret with Redis® credentials (instead of auth.password), must be created ahead of time
     existingSecret: ""
     # Password key to be retrieved from existing secret
@@ -390,11 +409,11 @@ redis:
 mongodb:
   ## Enable or disable MongoDB dependency completely.
   enabled: false
-  
+
   service:
     ports:
       mongodb: 27017
-  
+
   auth:
     # rootPassword:
     usernames:
@@ -427,4 +446,5 @@ mongodb:
     accessMode: ReadWriteOnce
     size: 8Gi
 
-  volumePermissions: { enabled: true }
+  volumePermissions:
+    enabled: true
