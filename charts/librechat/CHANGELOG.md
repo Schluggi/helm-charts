@@ -1,4 +1,9 @@
-# 1.4.4
+# 1.5.0
+- bump dependencies
+- bump librechat to v0.7.7
+- add volumes mount and init container
+
+# 1.4.5
 - bump dependencies
 - bump librechat to v1.0.0
 
