@@ -446,4 +446,5 @@ mongodb:
     accessMode: ReadWriteOnce
     size: 8Gi
 
-  volumePermissions: { enabled: true }
+  volumePermissions:
+    enabled: true
